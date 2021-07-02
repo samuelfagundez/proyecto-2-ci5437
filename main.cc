@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <limits>
-#include "othello_cut.h" // won't work correctly until .h is fixed!
+#include "algorithms.cpp"
 #include "utils.h"
 
 #include <unordered_map>
@@ -39,17 +39,17 @@ hash_table_t TTable[2];
 //int maxmin(state_t state, int depth, bool use_tt);
 //int minmax(state_t state, int depth, bool use_tt = false);
 //int maxmin(state_t state, int depth, bool use_tt = false);
-int negamax(state_t state, int depth, int color, bool use_tt = false);
-int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
-int scout(state_t state, int depth, int color, bool use_tt = false);
-int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
+// int negamax(state_t state, int depth, int color, bool use_tt = false);
+// int negamax(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
+// int scout(state_t state, int depth, int color, bool use_tt = false);
+// int negascout(state_t state, int depth, int alpha, int beta, int color, bool use_tt = false);
 
 int main(int argc, const char **argv) {
     state_t pv[128];
     int npv = 0;
     for( int i = 0; PV[i] != -1; ++i ) ++npv;
 
-    int algorithm = 0;
+    int algorithm = 1;
     if( argc > 1 ) algorithm = atoi(argv[1]);
     bool use_tt = argc > 2;
 
@@ -97,13 +97,13 @@ int main(int argc, const char **argv) {
 
         try {
             if( algorithm == 1 ) {
-                //value = negamax(pv[i], 0, color, use_tt);
+                value = negamax(pv[i], npv + 1 - i, color, &generated, &expanded, use_tt);
             } else if( algorithm == 2 ) {
-                //value = negamax(pv[i], 0, -200, 200, color, use_tt);
+                value = negamax(pv[i], npv + 1 - i, -200, 200, color, &generated, &expanded, use_tt);
             } else if( algorithm == 3 ) {
-                //value = scout(pv[i], 0, color, use_tt);
+                value = scout(pv[i], npv + 1 - i, color, &generated, &expanded, use_tt);
             } else if( algorithm == 4 ) {
-                //value = negascout(pv[i], 0, -200, 200, color, use_tt);
+                value = negascout(pv[i], npv + 1 - i, -200, 200, color, &generated, &expanded, use_tt);
             }
         } catch( const bad_alloc &e ) {
             cout << "size TT[0]: size=" << TTable[0].size() << ", #buckets=" << TTable[0].bucket_count() << endl;
