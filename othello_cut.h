@@ -141,6 +141,12 @@ class state_t {
                 valid_moves.push_back(pos);
             }
         }
+
+        if (valid_moves.empty() )
+        {
+            valid_moves.push_back(DIM);
+        }
+        
         return valid_moves;
     }
 

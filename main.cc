@@ -97,13 +97,13 @@ int main(int argc, const char **argv) {
 
         try {
             if( algorithm == 1 ) {
-                value = negamax(pv[i], npv + 1 - i, color, &generated, &expanded, use_tt);
+                value = negamax(pv[i], npv - i, color, &generated, &expanded, use_tt);
             } else if( algorithm == 2 ) {
-                value = negamax(pv[i], npv + 1 - i, INT32_MIN, INT32_MAX, color, &generated, &expanded, use_tt);
+                value = negamax(pv[i], npv - i, INT32_MIN, INT32_MAX, color, &generated, &expanded, use_tt);
             } else if( algorithm == 3 ) {
-                value = scout(pv[i], npv + 1 - i, color, &generated, &expanded, use_tt);
+                value = color * scout(pv[i], npv - i, color, &generated, &expanded, use_tt);
             } else if( algorithm == 4 ) {
-                value = negascout(pv[i], npv + 1 - i, INT32_MIN, INT32_MAX, color, &generated, &expanded, use_tt);
+                value = negascout(pv[i], npv - i, INT32_MIN, INT32_MAX, color, &generated, &expanded, use_tt);
             }
         } catch( const bad_alloc &e ) {
             cout << "size TT[0]: size=" << TTable[0].size() << ", #buckets=" << TTable[0].bucket_count() << endl;
